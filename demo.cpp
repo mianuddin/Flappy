@@ -76,7 +76,7 @@ void Bird::flap()
 	}
 	else
 	{
-		positionY -= 100;
+		positionY -= 70;
 	}
 	if(flapAnimation == false)
 	{
@@ -102,11 +102,12 @@ class Pipes
 	void generate();
 	void draw(window &inputWindow);
 	void move();
+	bool detectHit(Bird);
 };
 
 void Pipes::generate()
 {
-	Dice d(560); // Randomly choose start point for the gap inbetween the pipes.
+	Dice d(508); // Randomly choose start point for the gap inbetween the pipes.
 	int startPosition = d.Roll();
 
 	// Top Pipe
@@ -117,7 +118,7 @@ void Pipes::generate()
 
 	// Bottom Pipe
 	topX2 = 451;
-	topY2 = (startPosition+90); // Make the gap 90px
+	topY2 = (startPosition+135); // Set Gap
 	lowX2 = (451+52);
 	lowY2 = 650;
 }
@@ -126,22 +127,38 @@ void Pipes::draw(window &inputWindow)
 {
 	image pipeImage("assets\\pipe.png", PNG);
 
+	inputWindow.SetPen(GREEN);
+	inputWindow.SetBrush(GREEN);
+
 	// Draw top pipe.
-	for(int i=0; i<lowY1; i++)
-	{
-		inputWindow.DrawImage(pipeImage, topX1, i);
-	}
+	inputWindow.DrawRectangle(topX1, topY1, lowX1, lowY1);
 
 	// Draw bottom pipe.
-	for(int x=topY2; x<lowY2; x++)
-	{
-		inputWindow.DrawImage(pipeImage, topX1, x);
-	}
+	inputWindow.DrawRectangle(topX2, topY2, lowX2, lowY2);
 }
 
 void Pipes::move()
 {
-	topX1 -= 10;
+	topX1 -= 8;
+	lowX1 -= 8;
+	topX2 -= 8;
+	lowX2 -= 8;
+}
+
+bool Pipes::detectHit(Bird inputBird)
+{
+	if(inputBird.getFrontPositionX() >= topX1 && inputBird.getFrontPositionX() <= lowX1 && inputBird.getPositionY() >= topY1 && inputBird.getPositionY() <= lowY1)
+	{
+		return true;
+	}
+	else if(inputBird.getFrontPositionX() >= topX2 && inputBird.getFrontPositionX() <= lowX2 && inputBird.getBottomPositionY() >= topY2 && inputBird.getBottomPositionY() <= lowY2)
+	{
+		return true;
+	}
+	else if(inputBird.getBottomPositionY() >= 650)
+	{
+		return true;
+	}
 }
 
 void WaitNClear(window &inputWindow);
@@ -181,6 +198,7 @@ int main()
 
 	Pipes Alex; // Create a new pipe named Alex.
 	Alex.generate();
+	bool scoreTrip = false; // Ensures you only get one point per pair of pipes.
 
 	do
 	{
@@ -189,6 +207,17 @@ int main()
 		ktInput = gameWindow.GetKeyPress(cKeyData);
 		ctInput = gameWindow.GetMouseClick(iX, iY);
 
+		if(Alex.getLX1() < Joe.getPositionX() && scoreTrip == false)
+		{
+			score++;
+			scoreTrip = true;
+		}
+		if(Alex.getLX1() < 0)
+		{
+			Alex.generate(); // Make new pipes.
+			scoreTrip = false;
+		}
+
 		// Draw Bird
 		Joe.draw(gameWindow);
 
@@ -196,11 +225,11 @@ int main()
 		Alex.draw(gameWindow);
 
 		// Draw Score
-		gameWindow.SetFont(42, BOLD, BY_NAME, "Arial");
+		gameWindow.SetFont(54, BOLD, BY_NAME, "Arial");
 		gameWindow.SetPen(WHITE);
 		ostringstream currentScore;
 		currentScore << score;
-		gameWindow.DrawString(gameWindow.GetWidth()/2 - 21, 20, currentScore.str());
+		gameWindow.DrawString(gameWindow.GetWidth()/2 - 27, 20, currentScore.str());
 		gameWindow.UpdateBuffer();
 
 		if(ctInput == LEFT_CLICK || ktInput == 1)
@@ -210,7 +239,7 @@ int main()
 		Joe.pullDown();
 		Alex.move();
 		Pause(50);
-	} while(Joe.getBottomPositionY() <= 650);
+	} while(Alex.detectHit(Joe) != true);
 
 	gameWindow.SetBuffering(false);
 
