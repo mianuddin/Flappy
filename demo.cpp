@@ -7,6 +7,8 @@
 
 using namespace std;
 
+int score = 0;
+
 class Bird
 {
 	int positionX, positionY, gravityRate; // gravityRate: How many pixels the bird should fall at a time.
@@ -69,7 +71,14 @@ void Bird::draw(window &inputWindow)
 
 void Bird::flap()
 {
-	positionY -= 100;
+	if(positionY < 100)
+	{
+		positionY = 0;
+	}
+	else
+	{
+		positionY -= 100;
+	}
 	if(flapAnimation == false)
 	{
 		flapAnimation = true;
@@ -88,49 +97,57 @@ int main()
 
 	// Make sure main menu isnt erased.
 	gameWindow.SetPen(BLACK);
-    gameWindow.SetFont(16, BOLD, SWISS);
-    gameWindow.DrawString(gameWindow.GetWidth()/2 - 100, gameWindow.GetHeight() - 25, "Click mouse to continue...");
-    WaitNClear(gameWindow);
-    
-    // -- Title Screen --
-    image backgroundImage("assets\\Background.png", PNG);
-    gameWindow.DrawImage(backgroundImage, 0, 0);
-    image startImage("assets\\splash.png", PNG);
-    gameWindow.DrawImage(startImage, (225-147), (400-134));
-    WaitNClear(gameWindow);
+	gameWindow.SetFont(16, BOLD, SWISS);
+	gameWindow.DrawString(gameWindow.GetWidth()/2 - 100, gameWindow.GetHeight() - 25, "Click mouse to continue...");
+	WaitNClear(gameWindow);
+	
+	// -- Title Screen --
+	image backgroundImage("assets\\Background.png", PNG);
+	gameWindow.DrawImage(backgroundImage, 0, 0);
+	image startImage("assets\\splash.png", PNG);
+	gameWindow.DrawImage(startImage, (225-147), (400-134));
+	WaitNClear(gameWindow);
 
-    gameWindow.SetBuffering(true);
-    
-    bool bQuit = false;
-    keytype ktInput;
-    clicktype ctInput;
-    char cKeyData;
-    
-    gameWindow.FlushMouseQueue();
-    gameWindow.FlushKeyQueue();
+	gameWindow.SetBuffering(true);
+	
+	bool bQuit = false;
+	keytype ktInput;
+	clicktype ctInput;
+	char cKeyData;
+	
+	gameWindow.FlushMouseQueue();
+	gameWindow.FlushKeyQueue();
 
-    gameWindow.SetFont(32, BOLD, BY_NAME, "Arial");
+	Bird Joe; // Create new bird named Joe.
+	Joe.setup(125, 325, 10); // Set his x, y, and gravity rate.
 
-    Bird Joe;
-    Joe.setup(125, 400, 10);
-
-    do
-    {
-        gameWindow.DrawImage(backgroundImage, 0, 0);
-        gameWindow.SetPen(BLACK);   
-        ktInput = gameWindow.GetKeyPress(cKeyData);
-        ctInput = gameWindow.GetMouseClick(iX, iY);
-        Joe.draw(gameWindow);
-        gameWindow.UpdateBuffer();
-        if(ctInput == LEFT_CLICK)
-        {
-        	Joe.flap();
-        }
-        Joe.pullDown();
-        Pause(50);
-    } while(Joe.getBottomPositionY() <= 650);
+	do
+	{
+		gameWindow.DrawImage(backgroundImage, 0, 0);
+		gameWindow.SetPen(BLACK);   
+		ktInput = gameWindow.GetKeyPress(cKeyData);
+		ctInput = gameWindow.GetMouseClick(iX, iY);
+		Joe.draw(gameWindow);
+		gameWindow.UpdateBuffer();
+		if(ctInput == LEFT_CLICK)
+		{
+			Joe.flap();
+		}
+		Joe.pullDown();
+		Pause(50);
+	} while(Joe.getBottomPositionY() <= 650);
 
 	gameWindow.SetBuffering(false);
+
+	image endImage("assets\\scoreboard.png", PNG);
+	gameWindow.DrawImage(endImage, (225-179), (400-129));
+	// Print Score
+	gameWindow.SetFont(36, BOLD, BY_NAME, "Arial");
+	gameWindow.SetPen(BLACK);
+	ostringstream printScore;
+	printScore << score;
+	gameWindow.DrawString(295, 413, printScore.str());
+
 	return 0;
 }
 
@@ -140,12 +157,12 @@ void WaitNClear(window &inputWindow)
 	int iX, iY;
 
 	// Flush the mouse queue
-    inputWindow.FlushMouseQueue();
-    // Ignore return value since we don't care what type of click it was
-    inputWindow.WaitMouseClick(iX, iY);
-    // Set the brush and pen white so we can clear the background
-    inputWindow.SetPen(WHITE, 0);    
-    inputWindow.SetBrush(WHITE);
-    // Draw a rectangle that covers the entire window
-    inputWindow.DrawRectangle(0, 0, inputWindow.GetWidth(), inputWindow.GetHeight());
+	inputWindow.FlushMouseQueue();
+	// Ignore return value since we don't care what type of click it was
+	inputWindow.WaitMouseClick(iX, iY);
+	// Set the brush and pen white so we can clear the background
+	inputWindow.SetPen(WHITE, 0);    
+	inputWindow.SetBrush(WHITE);
+	// Draw a rectangle that covers the entire window
+	inputWindow.DrawRectangle(0, 0, inputWindow.GetWidth(), inputWindow.GetHeight());
 }
