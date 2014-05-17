@@ -92,14 +92,14 @@ class Pipes
 	int topX2, topY2, lowX2, lowY2; // Top left corner and bottom right corner.
 
 	public:
-	int getTX1() { return topX1 };
-	int getTY1() { return topY1 };
-	int getLX1() { return lowX1 };
-	int getLY1() { return lowY1 };
-	int getTX2() { return topX2 };
-	int getTY2() { return topY2 };
-	int getLX2() { return lowX2 };
-	int getLY2() { return lowY2 };
+	int getTX1() { return topX1; };
+	int getTY1() { return topY1; };
+	int getLX1() { return lowX1; };
+	int getLY1() { return lowY1; };
+	int getTX2() { return topX2; };
+	int getTY2() { return topY2; };
+	int getLX2() { return lowX2; };
+	int getLY2() { return lowY2; };
 	void generate();
 	void draw(window &inputWindow);
 };
@@ -156,7 +156,7 @@ int main()
 		gameWindow.DrawString(gameWindow.GetWidth()/2 - 21, 20, currentScore.str());
 		gameWindow.UpdateBuffer();
 
-		if(ctInput == LEFT_CLICK)
+		if(ctInput == LEFT_CLICK || ktInput == 1)
 		{
 			Joe.flap();
 		}
