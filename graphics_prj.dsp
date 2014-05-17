@@ -89,6 +89,22 @@ SOURCE=.\demo.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\Dice.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Dice.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Rando.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Rando.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\CMUgraphics.lib
 # End Source File
 # End Target
