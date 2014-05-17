@@ -84,8 +84,25 @@ void Bird::flap()
 		flapAnimation = true;
 		state = 1;
 	}
-
 }
+
+class Pipes
+{
+	int topX1, topY1, lowX1, lowY1; // Top left corner and bottom right corner.
+	int topX2, topY2, lowX2, lowY2; // Top left corner and bottom right corner.
+
+	public:
+	int getTX1() { return topX1 };
+	int getTY1() { return topY1 };
+	int getLX1() { return lowX1 };
+	int getLY1() { return lowY1 };
+	int getTX2() { return topX2 };
+	int getTY2() { return topY2 };
+	int getLX2() { return lowX2 };
+	int getLY2() { return lowY2 };
+	void generate();
+	void draw(window &inputWindow);
+};
 
 void WaitNClear(window &inputWindow);
 
@@ -95,7 +112,8 @@ int main()
 	window gameWindow(451, 800, 5, 5);
 	gameWindow.ChangeTitle("Flappy++");
 
-	// Make sure main menu isnt erased.
+	image logoImage("assets\\Logo.png", PNG);
+	gameWindow.DrawImage(logoImage, gameWindow.GetWidth()/2 - 153, gameWindow.GetHeight()/2 - 37);
 	gameWindow.SetPen(BLACK);
 	gameWindow.SetFont(16, BOLD, SWISS);
 	gameWindow.DrawString(gameWindow.GetWidth()/2 - 100, gameWindow.GetHeight() - 25, "Click mouse to continue...");
@@ -127,8 +145,17 @@ int main()
 		gameWindow.SetPen(BLACK);   
 		ktInput = gameWindow.GetKeyPress(cKeyData);
 		ctInput = gameWindow.GetMouseClick(iX, iY);
+
+		// Draw Bird
 		Joe.draw(gameWindow);
+		// Draw Score
+		gameWindow.SetFont(42, BOLD, BY_NAME, "Arial");
+		gameWindow.SetPen(WHITE);
+		ostringstream currentScore;
+		currentScore << score;
+		gameWindow.DrawString(gameWindow.GetWidth()/2 - 21, 20, currentScore.str());
 		gameWindow.UpdateBuffer();
+
 		if(ctInput == LEFT_CLICK)
 		{
 			Joe.flap();
