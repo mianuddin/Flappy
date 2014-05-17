@@ -26,7 +26,6 @@ class Bird
 	void setState(int st) { state = st; };
 	void flap();
 	void pullDown() { positionY += gravityRate; };
-	//bool detectHit();
 };
 
 void Bird::setup(int posX, int posY, int gravRate)
@@ -102,7 +101,48 @@ class Pipes
 	int getLY2() { return lowY2; };
 	void generate();
 	void draw(window &inputWindow);
+	void move();
 };
+
+void Pipes::generate()
+{
+	Dice d(560); // Randomly choose start point for the gap inbetween the pipes.
+	int startPosition = d.Roll();
+
+	// Top Pipe
+	topX1 = 451;
+	topY1 = 0;
+	lowX1 = (451+52); // Width of pipe is 52px
+	lowY1 = startPosition;
+
+	// Bottom Pipe
+	topX2 = 451;
+	topY2 = (startPosition+90); // Make the gap 90px
+	lowX2 = (451+52);
+	lowY2 = 650;
+}
+
+void Pipes::draw(window &inputWindow)
+{
+	image pipeImage("assets\\pipe.png", PNG);
+
+	// Draw top pipe.
+	for(int i=0; i<lowY1; i++)
+	{
+		inputWindow.DrawImage(pipeImage, topX1, i);
+	}
+
+	// Draw bottom pipe.
+	for(int x=topY2; x<lowY2; x++)
+	{
+		inputWindow.DrawImage(pipeImage, topX1, x);
+	}
+}
+
+void Pipes::move()
+{
+	topX1 -= 10;
+}
 
 void WaitNClear(window &inputWindow);
 
@@ -139,6 +179,9 @@ int main()
 	Bird Joe; // Create new bird named Joe.
 	Joe.setup(125, 325, 10); // Set his x, y, and gravity rate.
 
+	Pipes Alex; // Create a new pipe named Alex.
+	Alex.generate();
+
 	do
 	{
 		gameWindow.DrawImage(backgroundImage, 0, 0);
@@ -148,6 +191,10 @@ int main()
 
 		// Draw Bird
 		Joe.draw(gameWindow);
+
+		// Draw Pipes
+		Alex.draw(gameWindow);
+
 		// Draw Score
 		gameWindow.SetFont(42, BOLD, BY_NAME, "Arial");
 		gameWindow.SetPen(WHITE);
@@ -161,6 +208,7 @@ int main()
 			Joe.flap();
 		}
 		Joe.pullDown();
+		Alex.move();
 		Pause(50);
 	} while(Joe.getBottomPositionY() <= 650);
 
