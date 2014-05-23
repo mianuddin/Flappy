@@ -6,13 +6,13 @@
 --------------------Configuration: graphics_prj - Win32 Debug--------------------
 </h3>
 <h3>Command Lines</h3>
-Creating temporary file "C:\DOCUME~1\cpluplu\LOCALS~1\Temp\RSP1D.tmp" with contents
+Creating temporary file "C:\DOCUME~1\cpluplu\LOCALS~1\Temp\RSP70.tmp" with contents
 [
 /nologo /MLd /W3 /Gm /GX /ZI /Od /I "." /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS" /Fp"Debug/graphics_prj.pch" /YX /Fo"Debug/" /Fd"Debug/" /FD /GZ /c 
 "E:\Flappy\demo.cpp"
 ]
-Creating command line "cl.exe @C:\DOCUME~1\cpluplu\LOCALS~1\Temp\RSP1D.tmp" 
-Creating temporary file "C:\DOCUME~1\cpluplu\LOCALS~1\Temp\RSP1E.tmp" with contents
+Creating command line "cl.exe @C:\DOCUME~1\cpluplu\LOCALS~1\Temp\RSP70.tmp" 
+Creating temporary file "C:\DOCUME~1\cpluplu\LOCALS~1\Temp\RSP71.tmp" with contents
 [
 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib winmm.lib /nologo /subsystem:console /incremental:yes /pdb:"Debug/graphics_prj.pdb" /debug /machine:I386 /nodefaultlib:"libc" /out:"Debug/graphics_prj.exe" /pdbtype:sept 
 .\Debug\demo.obj
@@ -20,13 +20,13 @@ kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32
 .\Debug\Rando.obj
 .\CMUgraphics.lib
 ]
-Creating command line "link.exe @C:\DOCUME~1\cpluplu\LOCALS~1\Temp\RSP1E.tmp"
+Creating command line "link.exe @C:\DOCUME~1\cpluplu\LOCALS~1\Temp\RSP71.tmp"
 <h3>Output Window</h3>
 Compiling...
 demo.cpp
 f:\vc98\include\utility(21) : warning C4786: 'std::reverse_iterator<std::deque<std::pair<enum clicktype,std::pair<int,int> >,std::allocator<std::pair<enum clicktype,std::pair<int,int> > > >::const_iterator,std::pair<enum clicktype,std::pair<int,int> >,std::pair<enum clicktype,std::pair<int,int> > const &,std::pair<enum clicktype,std::pair<int,int> > const *,int>' : identifier was truncated to '255' characters in the debug information
 f:\vc98\include\utility(21) : warning C4786: 'std::reverse_iterator<std::deque<std::pair<enum clicktype,std::pair<int,int> >,std::allocator<std::pair<enum clicktype,std::pair<int,int> > > >::iterator,std::pair<enum clicktype,std::pair<int,int> >,std::pair<enum clicktype,std::pair<int,int> > &,std::pair<enum clicktype,std::pair<int,int> > *,int>' : identifier was truncated to '255' characters in the debug information
-E:\Flappy\demo.cpp(159) : warning C4715: 'Pipes::detectHit' : not all control paths return a value
+E:\Flappy\demo.cpp(143) : warning C4715: 'Pipes::detectHit' : not all control paths return a value
 Linking...
 
 

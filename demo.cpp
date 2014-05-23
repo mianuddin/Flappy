@@ -16,19 +16,18 @@ const int kPipeMoveRate = 8; // How many pixels the pipes move.
 
 class Bird
 {
-  int positionX, positionY; // gravityRate: How many pixels the bird should fall at a time.
+  int positionX, positionY;
   int state; // Wings up(1), down(2), or normal(0).
   int upCount; // How many times the "up" image has been drawn.
   bool flapAnimation; // If the flapAnimation is running.
 
   public:
-  int getPositionX() { return positionX; };
-  int getFrontPositionX() { return (positionX+34); }; // X Coordinate of front of bird.
-  int getPositionY() { return positionY; };
-  int getBottomPositionY() { return (positionY+24); }; // Y Coordinate of bottom of bird.
+  int getLeftX() { return positionX; };
+  int getRightX() { return (positionX+34); };
+  int getTopY() { return positionY; };
+  int getBottomY() { return (positionY+24); };
   void setup(int, int);
   void draw(window &inputWindow);
-  void setState(int st) { state = st; };
   void flap();
   void pullDown() { positionY += kGravityRate; };
 };
@@ -91,17 +90,10 @@ void Bird::flap()
 
 class Pipes
 {
-  int topX1, topY1, lowX1, lowY1; // Top left corner and bottom right corner.
-  int topX2, topY2, lowX2, lowY2; // Top left corner and bottom right corner.
+  int leftX, rightX, bottomOfPipe1Y, topOfPipe2Y, bottomOfPipe2Y;
+
   public:
-  int getTX1() { return topX1; };
-  int getTY1() { return topY1; };
-  int getLX1() { return lowX1; };
-  int getLY1() { return lowY1; };
-  int getTX2() { return topX2; };
-  int getTY2() { return topY2; };
-  int getLX2() { return lowX2; };
-  int getLY2() { return lowY2; };
+  int getRightX() { return rightX; };
   void generate();
   void draw(window &inputWindow);
   void move();
@@ -113,16 +105,13 @@ void Pipes::generate()
   Dice d(508); // Randomly choose start point for the gap inbetween the pipes.
   int startPosition = d.Roll();
   int pipeWidth = 52;
+  leftX = 451;
+  rightX = (451+pipeWidth);
   // Top Pipe
-  topX1 = 451;
-  topY1 = 0;
-  lowX1 = (451+pipeWidth);
-  lowY1 = startPosition;
+  bottomOfPipe1Y = startPosition;
   // Bottom Pipe
-  topX2 = 451;
-  topY2 = (startPosition+kPipeGap);
-  lowX2 = (451+pipeWidth);
-  lowY2 = 650;
+  topOfPipe2Y = (startPosition+kPipeGap);
+  bottomOfPipe2Y = 650;
 }
 
 void Pipes::draw(window &inputWindow)
@@ -131,28 +120,23 @@ void Pipes::draw(window &inputWindow)
   inputWindow.SetPen(GREEN);
   inputWindow.SetBrush(GREEN);
   // Draw top pipe.
-  inputWindow.DrawRectangle(topX1, topY1, lowX1, lowY1);
+  inputWindow.DrawRectangle(leftX, 0, rightX, bottomOfPipe1Y);
   // Draw bottom pipe.
-  inputWindow.DrawRectangle(topX2, topY2, lowX2, lowY2);
+  inputWindow.DrawRectangle(leftX, topOfPipe2Y, rightX, bottomOfPipe2Y);
 }
 
 void Pipes::move()
 {
-  topX1 -= kPipeMoveRate;
-  lowX1 -= kPipeMoveRate;
-  topX2 -= kPipeMoveRate;
-  lowX2 -= kPipeMoveRate;
+  leftX -= kPipeMoveRate;
+  rightX -= kPipeMoveRate;
 }
 
 bool Pipes::detectHit(Bird inputBird)
 {
-  bool hitTopPipe = inputBird.getFrontPositionX() >= topX1 && inputBird.getFrontPositionX() <= lowX1 && inputBird.getPositionY() >= topY1 && inputBird.getPositionY() <= lowY1;
-  bool hitBottomPipe = inputBird.getFrontPositionX() >= topX2 && inputBird.getFrontPositionX() <= lowX2 && inputBird.getBottomPositionY() >= topY2 && inputBird.getBottomPositionY() <= lowY2;
-  if(hitTopPipe || hitBottomPipe)
-  {
-    return true;
-  }
-  else if(inputBird.getBottomPositionY() >= 650)
+  bool hitTopPipe = inputBird.getRightX() >= leftX && inputBird.getRightX() <= rightX && inputBird.getTopY() >= 0 && inputBird.getTopY() <= bottomOfPipe1Y;
+  bool hitBottomPipe = inputBird.getRightX() >= leftX && inputBird.getRightX() <= rightX && inputBird.getBottomY() >= topOfPipe2Y && inputBird.getBottomY() <= bottomOfPipe2Y;
+  bool hitFloor = inputBird.getBottomY() >= 650;
+  if(hitTopPipe || hitBottomPipe || hitFloor)
   {
     return true;
   }
@@ -162,8 +146,7 @@ void WaitNClear(window &inputWindow);
 
 int main()
 {
-  int iX, iY;
-  window gameWindow(451, 800, 5, 5);
+  window gameWindow(451, 800, 0, 0);
   gameWindow.ChangeTitle("Flappy++");
   image logoImage("assets\\Logo.png", PNG);
   gameWindow.DrawImage(logoImage, gameWindow.GetWidth()/2 - 153, gameWindow.GetHeight()/2 - 37);
@@ -176,36 +159,42 @@ int main()
   gameWindow.DrawImage(backgroundImage, 0, 0);
   image startImage("assets\\splash.png", PNG);
   gameWindow.DrawImage(startImage, (225-147), (400-134));
-  WaitNClear(gameWindow); // End Title
+  WaitNClear(gameWindow); // End Title Screen
   gameWindow.SetBuffering(true);
-  bool bQuit = false;
+  gameWindow.FlushMouseQueue();
+  gameWindow.FlushKeyQueue();
   keytype ktInput;
   clicktype ctInput;
   char cKeyData;
-  gameWindow.FlushMouseQueue();
-  gameWindow.FlushKeyQueue();
+  int iX, iY;
   Bird Joe; // Create new bird named Joe.
   Joe.setup(125, 325); // Set his x, y, and gravity rate.
   Pipes Alex; // Create a new pipe named Alex.
-  Alex.generate();
+  Alex.generate(); // Generate Pipes
   bool scoreTrip = false; // Ensures you only get one point per pair of pipes.
-
   do
   {
     gameWindow.DrawImage(backgroundImage, 0, 0);
-    gameWindow.SetPen(BLACK);   
+    gameWindow.SetPen(BLACK);
     ktInput = gameWindow.GetKeyPress(cKeyData);
     ctInput = gameWindow.GetMouseClick(iX, iY);
-    if(Alex.getLX1() < Joe.getPositionX() && scoreTrip == false)
+    if(Alex.getRightX() < Joe.getLeftX() && scoreTrip == false)
     {
       score++;
       scoreTrip = true;
     }
-    if(Alex.getLX1() < 0)
+    if(Alex.getRightX() < 0)
     {
-      Alex.generate(); // Make new pipes.
+      Alex.generate();
       scoreTrip = false;
     }
+    // If the user clicks or presses a key, flap.
+    if(ctInput == LEFT_CLICK || ktInput == 1)
+    {
+      Joe.flap();
+    }
+    Joe.pullDown();
+    Alex.move();
     // Draw Bird
     Joe.draw(gameWindow);
     // Draw Pipes
@@ -217,17 +206,21 @@ int main()
     currentScore << score;
     gameWindow.DrawString(gameWindow.GetWidth()/2 - 27, 20, currentScore.str());
     gameWindow.UpdateBuffer();
-    // If the user clicks or presses a key, flap.
-    if(ctInput == LEFT_CLICK || ktInput == 1)
-    {
-      Joe.flap();
-    }
-    Joe.pullDown();
-    Alex.move();
     Pause(50);
   } while(Alex.detectHit(Joe) != true);
-  gameWindow.SetBuffering(false);
+
+  while(Joe.getBottomY() < 650)
+  {
+    gameWindow.DrawImage(backgroundImage, 0, 0);
+    Joe.pullDown();
+    Joe.draw(gameWindow);
+    Alex.draw(gameWindow);
+    gameWindow.UpdateBuffer();
+    Pause(10);
+  }
+
   // End Screen
+  gameWindow.SetBuffering(false);
   image endImage("assets\\scoreboard.png", PNG);
   gameWindow.DrawImage(endImage, (225-179), (400-129));
   // Print Score
@@ -236,6 +229,7 @@ int main()
   ostringstream printScore;
   printScore << score;
   gameWindow.DrawString(295, 413, printScore.str());
+  Pause(5000);
 
   return 0;
 }
