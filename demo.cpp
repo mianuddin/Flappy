@@ -30,6 +30,7 @@ class Bird
   void draw(window &inputWindow);
   void flap();
   void pullDown() { positionY += kGravityRate; };
+  void setY(int input) { positionY = input; };
 };
 
 void Bird::setup(int posX, int posY)
@@ -133,10 +134,13 @@ void Pipes::move()
 
 bool Pipes::detectHit(Bird inputBird)
 {
-  bool hitTopPipe = inputBird.getRightX() >= leftX && inputBird.getRightX() <= rightX && inputBird.getTopY() >= 0 && inputBird.getTopY() <= bottomOfPipe1Y;
-  bool hitBottomPipe = inputBird.getRightX() >= leftX && inputBird.getRightX() <= rightX && inputBird.getBottomY() >= topOfPipe2Y && inputBird.getBottomY() <= bottomOfPipe2Y;
+  bool hitTopPipeC1 = inputBird.getRightX() >= leftX && inputBird.getRightX() <= rightX && inputBird.getTopY() >= 0 && inputBird.getTopY() <= bottomOfPipe1Y; // Top Corner 1
+  bool hitTopPipeC2 = inputBird.getLeftX() >= leftX && inputBird.getLeftX() <= rightX && inputBird.getTopY() >= 0 && inputBird.getTopY() <= bottomOfPipe1Y; // Top Corner 2
+  bool hitBottomPipeC1 = inputBird.getRightX() >= leftX && inputBird.getRightX() <= rightX && inputBird.getBottomY() >= topOfPipe2Y && inputBird.getBottomY() <= bottomOfPipe2Y; // Bottom Corner 1
+  bool hitBottomPipeC2 = inputBird.getLeftX() >= leftX && inputBird.getLeftX() <= rightX && inputBird.getBottomY() >= topOfPipe2Y && inputBird.getBottomY() <= bottomOfPipe2Y; // Bottom Corner 2
   bool hitFloor = inputBird.getBottomY() >= 650;
-  if(hitTopPipe || hitBottomPipe || hitFloor)
+
+  if(hitTopPipeC1 || hitTopPipeC2 || hitBottomPipeC1 || hitBottomPipeC2 || hitFloor)
   {
     return true;
   }
@@ -217,6 +221,15 @@ int main()
     Alex.draw(gameWindow);
     gameWindow.UpdateBuffer();
     Pause(10);
+  }
+
+  if(Joe.getBottomY() != 650)
+  {
+    gameWindow.DrawImage(backgroundImage, 0, 0);
+    Joe.setY(626);
+    Joe.draw(gameWindow);
+    Alex.draw(gameWindow);
+    gameWindow.UpdateBuffer();
   }
 
   // End Screen
