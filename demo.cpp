@@ -146,14 +146,11 @@ void Pipes::move()
 
 bool Pipes::detectHit(Bird inputBird)
 {
-  if(inputBird.getFrontPositionX() >= topX1 && inputBird.getFrontPositionX() <= lowX1 && inputBird.getPositionY() >= topY1 && inputBird.getPositionY() <= lowY1)
+  bool hitTopPipe = inputBird.getFrontPositionX() >= topX1 && inputBird.getFrontPositionX() <= lowX1 && inputBird.getPositionY() >= topY1 && inputBird.getPositionY() <= lowY1;
+  bool hitBottomPipe = inputBird.getFrontPositionX() >= topX2 && inputBird.getFrontPositionX() <= lowX2 && inputBird.getBottomPositionY() >= topY2 && inputBird.getBottomPositionY() <= lowY2;
+  if(hitTopPipe || hitBottomPipe)
   {
     return true;
-  }
-  else if(inputBird.getFrontPositionX() >= topX2 && inputBird.getFrontPositionX() <= lowX2 && inputBird.getBottomPositionY() >= topY2 && inputBird.getBottomPositionY() <= lowY2)
-  {
-    return true;
-    
   }
   else if(inputBird.getBottomPositionY() >= 650)
   {
