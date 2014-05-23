@@ -117,13 +117,17 @@ void Pipes::generate()
 
 void Pipes::draw(window &inputWindow)
 {
-  image pipeImage("assets\\pipe.png", PNG);
+  image pipe1Image("assets\\pipe-down.png", PNG);
+  image pipe2Image("assets\\pipe-up.png", PNG);
   inputWindow.SetPen(GREEN);
   inputWindow.SetBrush(GREEN);
   // Draw top pipe.
-  inputWindow.DrawRectangle(leftX, 0, rightX, bottomOfPipe1Y);
+  inputWindow.DrawImage(pipe1Image, leftX, bottomOfPipe1Y-500);
   // Draw bottom pipe.
-  inputWindow.DrawRectangle(leftX, topOfPipe2Y, rightX, bottomOfPipe2Y);
+  inputWindow.DrawImage(pipe2Image, leftX, topOfPipe2Y);
+  // Draw Floor
+  image floorImage("assets\\bottom.png", PNG);
+  inputWindow.DrawImage(floorImage, 0, 650);
 }
 
 void Pipes::move()
@@ -210,17 +214,16 @@ int main()
     currentScore << score;
     gameWindow.DrawString(gameWindow.GetWidth()/2 - 27, 20, currentScore.str());
     gameWindow.UpdateBuffer();
-    Pause(50);
+    //Pause(50);
   } while(Alex.detectHit(Joe) != true);
 
   while(Joe.getBottomY() < 650)
   {
     gameWindow.DrawImage(backgroundImage, 0, 0);
-    Joe.pullDown();
+    Joe.setY(Joe.getTopY()+20);
     Joe.draw(gameWindow);
     Alex.draw(gameWindow);
     gameWindow.UpdateBuffer();
-    Pause(10);
   }
 
   if(Joe.getBottomY() != 650)
