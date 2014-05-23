@@ -214,16 +214,17 @@ int main()
     currentScore << score;
     gameWindow.DrawString(gameWindow.GetWidth()/2 - 27, 20, currentScore.str());
     gameWindow.UpdateBuffer();
-    //Pause(50);
+    Pause(50);
   } while(Alex.detectHit(Joe) != true);
 
   while(Joe.getBottomY() < 650)
   {
     gameWindow.DrawImage(backgroundImage, 0, 0);
-    Joe.setY(Joe.getTopY()+20);
+    Joe.pullDown();
     Joe.draw(gameWindow);
     Alex.draw(gameWindow);
     gameWindow.UpdateBuffer();
+    Pause(10);
   }
 
   if(Joe.getBottomY() != 650)
