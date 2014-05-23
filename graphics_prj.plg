@@ -6,21 +6,21 @@
 --------------------Configuration: graphics_prj - Win32 Debug--------------------
 </h3>
 <h3>Command Lines</h3>
-Creating temporary file "C:\DOCUME~1\cpluplu\LOCALS~1\Temp\RSP171.tmp" with contents
+Creating temporary file "C:\DOCUME~1\cpluplu\LOCALS~1\Temp\RSP17.tmp" with contents
 [
 /nologo /MLd /W3 /Gm /GX /ZI /Od /I "." /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS" /Fp"Debug/graphics_prj.pch" /YX /Fo"Debug/" /Fd"Debug/" /FD /GZ /c 
 "E:\Flappy\demo.cpp"
 ]
-Creating command line "cl.exe @C:\DOCUME~1\cpluplu\LOCALS~1\Temp\RSP171.tmp" 
-Creating temporary file "C:\DOCUME~1\cpluplu\LOCALS~1\Temp\RSP172.tmp" with contents
+Creating command line "cl.exe @C:\DOCUME~1\cpluplu\LOCALS~1\Temp\RSP17.tmp" 
+Creating temporary file "C:\DOCUME~1\cpluplu\LOCALS~1\Temp\RSP18.tmp" with contents
 [
 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib winmm.lib /nologo /subsystem:console /incremental:yes /pdb:"Debug/graphics_prj.pdb" /debug /machine:I386 /nodefaultlib:"libc" /out:"Debug/graphics_prj.exe" /pdbtype:sept 
 .\Debug\demo.obj
-.\CMUgraphics.lib
-.\Debug\Rando.obj
 .\Debug\Dice.obj
+.\Debug\Rando.obj
+.\CMUgraphics.lib
 ]
-Creating command line "link.exe @C:\DOCUME~1\cpluplu\LOCALS~1\Temp\RSP172.tmp"
+Creating command line "link.exe @C:\DOCUME~1\cpluplu\LOCALS~1\Temp\RSP18.tmp"
 <h3>Output Window</h3>
 Compiling...
 demo.cpp
