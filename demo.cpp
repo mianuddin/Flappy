@@ -119,15 +119,19 @@ void Pipes::draw(window &inputWindow)
 {
   image pipe1Image("assets\\pipe-down.png", PNG);
   image pipe2Image("assets\\pipe-up.png", PNG);
-  inputWindow.SetPen(GREEN);
-  inputWindow.SetBrush(GREEN);
-  // Draw top pipe.
+  inputWindow.SetPen(DARKGREEN);
+  inputWindow.SetBrush(DARKGREEN);
+
+  // HI SPEC
   inputWindow.DrawImage(pipe1Image, leftX, bottomOfPipe1Y-500);
-  // Draw bottom pipe.
   inputWindow.DrawImage(pipe2Image, leftX, topOfPipe2Y);
-  // Draw Floor
   image floorImage("assets\\bottom.png", PNG);
   inputWindow.DrawImage(floorImage, 0, 650);
+
+  // LOW SPEC
+  //inputWindow.DrawRectangle(leftX, 0, rightX, bottomOfPipe1Y);
+  //inputWindow.DrawRectangle(leftX, topOfPipe2Y, rightX, bottomOfPipe2Y);
+
 }
 
 void Pipes::move()
