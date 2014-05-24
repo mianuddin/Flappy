@@ -221,18 +221,18 @@ int main()
   {
     gameWindow.DrawImage(backgroundImage, 0, 0);
     Joe.pullDown();
-    Joe.draw(gameWindow);
     Alex.draw(gameWindow);
+    Joe.draw(gameWindow);
     gameWindow.UpdateBuffer();
-    Pause(10);
+    // Pause(10);
   }
 
   if(Joe.getBottomY() != 650)
   {
     gameWindow.DrawImage(backgroundImage, 0, 0);
     Joe.setY(626);
-    Joe.draw(gameWindow);
     Alex.draw(gameWindow);
+    Joe.draw(gameWindow);
     gameWindow.UpdateBuffer();
   }
 
@@ -246,7 +246,7 @@ int main()
   ostringstream printScore;
   printScore << score;
   gameWindow.DrawString(295, 413, printScore.str());
-  Pause(5000);
+  Pause(2500);
 
   return 0;
 }
